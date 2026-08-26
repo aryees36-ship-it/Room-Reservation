@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SNMM 2026 | Accommodation Reservation</title>
+
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+  <!-- Bootstrap Icons -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    rel="stylesheet"
+  >
+
+  <!-- Your stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     BACKGROUND DECORATION
+========================================================= -->
+
+<div class="background-glow glow-one"></div>
+<div class="background-glow glow-two"></div>
+<div class="background-glow glow-three"></div>
+
+
+<!-- =========================================================
+     MAIN CONTAINER
+========================================================= -->
+
+<div class="container reservation-wrapper">
+
+
+  <!-- =======================================================
+       TOP BAR
+  ======================================================== -->
+
+  <div class="top-bar">
+
+    <div class="brand-small">
+
+      <div class="brand-icon">
+        <i class="bi bi-building"></i>
+      </div>
+
+      <div>
+
+        <span class="brand-title">
+          SNMMC
+        </span>
+
+        <span class="brand-year">
+          2026
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="theme-toggle"
+      id="themeToggle"
+      title="Toggle theme"
+    >
+
+      <i class="bi bi-moon-stars"></i>
+
+    </button>
+
+  </div>
+
+
+
+  <!-- =======================================================
+       HERO
+  ======================================================== -->
+
+  <section class="hero-section">
+
+    <div class="hero-badge">
+
+      <i class="bi bi-calendar-event"></i>
+
+      SNMMC 2026
+
+    </div>
+
+
+    <h1>
+      Accommodation
+      <span>Reservation</span>
+    </h1>
+
+
+    <p>
+      Secure your accommodation for the SNMM 2026 conference.
+      Verify your registration and select your preferred room.
+    </p>
+
+
+    <div class="hero-features">
+
+      <div class="hero-feature">
+
+        <i class="bi bi-shield-check"></i>
+
+        <span>Secure Reservation</span>
+
+      </div>
+
+
+      <div class="hero-feature">
+
+        <i class="bi bi-house-check"></i>
+
+        <span>Live Availability</span>
+
+      </div>
+
+
+      <div class="hero-feature">
+
+        <i class="bi bi-lightning-charge"></i>
+
+        <span>Fast Confirmation</span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =======================================================
+       STEP INDICATOR
+  ======================================================== -->
+
+  <div class="steps-container">
+
+    <div class="step active">
+
+      <div class="step-number">
+        1
+      </div>
+
+      <div class="step-text">
+
+        <strong>Verify</strong>
+
+        <small>Participant</small>
+
+      </div>
+
+    </div>
+
+
+    <div class="step-line"></div>
+
+
+    <div class="step">
+
+      <div class="step-number">
+        2
+      </div>
+
+      <div class="step-text">
+
+        <strong>Select</strong>
+
+        <small>Accommodation</small>
+
+      </div>
+
+    </div>
+
+
+    <div class="step-line"></div>
+
+
+    <div class="step">
+
+      <div class="step-number">
+        3
+      </div>
+
+      <div class="step-text">
+
+        <strong>Confirm</strong>
+
+        <small>Reservation</small>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =======================================================
+       VERIFICATION CARD
+  ======================================================== -->
+
+  <div class="glass-card verification-card">
+
+
+    <div class="card-heading">
+
+      <div class="heading-icon">
+
+        <i class="bi bi-person-check"></i>
+
+      </div>
+
+      <div>
+
+        <h5>
+          Participant Verification
+        </h5>
+
+        <p>
+          Enter your registration number to continue.
+        </p>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="verification-form">
+
+      <div class="input-wrapper">
+
+        <label for="registrationCode">
+
+          <i class="bi bi-upc-scan"></i>
+
+          Registration Number
+
+        </label>
+
+
+        <div class="input-group-modern">
+    <span class="registration-prefix">SNMMC2026-</span>
+
+    <input
+      type="text"
+      id="registrationCode"
+      class="form-control registration-input"
+      placeholder="00001"
+      maxlength="5"
+      inputmode="numeric"
+      autocomplete="off"
+    >
+</div>
+
+
+
+        <small class="input-help">
+
+          Example: SNMMC2026-00001
+
+        </small>
+
+      </div>
+
+
+
+      <button
+        class="btn-verify"
+        onclick="verifyParticipant()"
+      >
+
+        <span>
+          Verify Participant
+        </span>
+
+        <i class="bi bi-arrow-right"></i>
+
+      </button>
+
+    </div>
+
+
+
+    <div
+      id="verificationMessage"
+      class="verification-message"
+    ></div>
+
+
+  </div>
+
+
+
+  <!-- =======================================================
+       PARTICIPANT DETAILS
+  ======================================================== -->
+
+  <div
+    id="participantSection"
+    class="glass-card participant-card d-none"
+  >
+
+
+    <div class="card-heading">
+
+      <div class="heading-icon success-icon">
+
+        <i class="bi bi-person-vcard"></i>
+
+      </div>
+
+      <div>
+
+        <h5>
+          Participant Details
+        </h5>
+
+        <p>
+          Your registration has been successfully verified.
+        </p>
+
+      </div>
+
+
+      <div class="verified-badge">
+
+        <i class="bi bi-check-circle-fill"></i>
+
+        Verified
+
+      </div>
+
+    </div>
+
+
+
+    <div class="participant-grid">
+
+
+      <div class="participant-item">
+
+        <span class="detail-label">
+
+          <i class="bi bi-person"></i>
+
+          Full Name
+
+        </span>
+
+        <strong id="participantName">
+        </strong>
+
+      </div>
+
+
+
+      <div class="participant-item">
+
+        <span class="detail-label">
+
+          <i class="bi bi-person-badge"></i>
+
+          Staff ID
+
+        </span>
+
+        <strong id="participantStaffId">
+        </strong>
+
+      </div>
+
+
+
+      <div class="participant-item">
+
+        <span class="detail-label">
+
+          <i class="bi bi-briefcase"></i>
+
+          Position
+
+        </span>
+
+        <strong id="participantPosition">
+        </strong>
+
+      </div>
+
+
+
+      <div class="participant-item">
+
+        <span class="detail-label">
+
+          <i class="bi bi-building"></i>
+
+          Agency
+
+        </span>
+
+        <strong id="participantAgency">
+        </strong>
+
+      </div>
+
+
+
+      <div class="participant-item">
+
+        <span class="detail-label">
+
+          <i class="bi bi-calendar-check"></i>
+
+          Participation
+
+        </span>
+
+        <strong id="participantParticipation">
+        </strong>
+
+      </div>
+
+
+
+      <div class="participant-item">
+
+        <span class="detail-label">
+
+          <i class="bi bi-upc"></i>
+
+          Registration
+
+        </span>
+
+        <strong id="participantRegistration">
+        </strong>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+
+  <!-- =======================================================
+       ROOM SECTION
+  ======================================================== -->
+
+  <div
+    id="roomSection"
+    class="room-section d-none"
+  >
+
+
+    <div class="section-heading text-center">
+
+      <div class="section-badge">
+
+        <i class="bi bi-house-door"></i>
+
+        Accommodation
+
+      </div>
+
+
+      <h2>
+        Choose Your Room
+      </h2>
+
+
+      <p>
+        Select the accommodation option that best suits you.
+      </p>
+
+    </div>
+
+
+
+    <div
+      id="roomContainer"
+      class="row g-4"
+    ></div>
+
+
+  </div>
+
+
+
+  <!-- =======================================================
+       LOADING
+  ======================================================== -->
+
+  <div
+    id="loading"
+    class="loading-overlay d-none"
+  >
+
+    <div class="loading-card">
+
+      <div class="spinner-ring"></div>
+
+      <h5>
+        Processing...
+      </h5>
+
+      <p>
+        Please wait while we process your request.
+      </p>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =======================================================
+       SUCCESS MODAL
+  ======================================================== -->
+
+  <div
+    class="modal fade"
+    id="reservationModal"
+    tabindex="-1"
+  >
+
+    <div class="modal-dialog modal-dialog-centered">
+
+      <div class="modal-content reservation-modal">
+
+
+        <div class="success-animation">
+
+          <div class="success-circle">
+
+            <i class="bi bi-check-lg"></i>
+
+          </div>
+
+        </div>
+
+
+        <div class="modal-body text-center">
+
+          <span class="modal-badge">
+
+            <i class="bi bi-check-circle"></i>
+
+            Reservation Confirmed
+
+          </span>
+
+
+          <h3>
+            Reservation Successful
+          </h3>
+
+
+          <p class="modal-subtitle">
+
+            Your accommodation reservation has been successfully recorded.
+
+          </p>
+
+
+          <div
+            id="reservationResult"
+            class="reservation-result"
+          ></div>
+
+
+        </div>
+
+
+        <div class="modal-footer justify-content-center">
+
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            onclick="location.reload()"
+            >
+            🔄 Refresh
+          </button>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =======================================================
+       FOOTER
+  ======================================================== -->
+
+  <footer class="reservation-footer">
+
+    <div>
+
+      <strong>
+        SNMM 2026
+      </strong>
+
+      <span>
+        Accommodation Reservation Portal
+      </span>
+
+    </div>
+
+
+    <div class="footer-secure">
+
+      <i class="bi bi-shield-lock"></i>
+
+      Secure Reservation System
+
+    </div>
+
+  </footer>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     BOOTSTRAP JS
+========================================================= -->
+
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+<!-- YOUR EXISTING APP JS -->
+<script src="app.js"></script>
+
+
+</body>
+</html>
