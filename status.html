@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SNMM 2026 - Room Status Checker</title>
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    rel="stylesheet"
+  >
+
+  <style>
+
+    :root {
+      --navy: #0B1F3A;
+      --green: #009879;
+      --gold: #D4AF37;
+      --light: #f5f7fa;
+      --dark: #172033;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(11,31,58,0.98),
+          rgba(0,152,121,0.92)
+        );
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--dark);
+    }
+
+    .page-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 15px;
+    }
+
+    .status-card {
+      width: 100%;
+      max-width: 650px;
+      background: #ffffff;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+
+    .header {
+      background: var(--navy);
+      color: white;
+      text-align: center;
+      padding: 35px 25px 30px;
+    }
+
+    .logo-circle {
+      width: 75px;
+      height: 75px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      font-weight: bold;
+      font-size: 22px;
+    }
+
+    .header h1 {
+      font-size: 27px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .header p {
+      margin: 0;
+      opacity: 0.85;
+      font-size: 14px;
+    }
+
+    .gold-line {
+      width: 70px;
+      height: 4px;
+      background: var(--gold);
+      margin: 15px auto 0;
+      border-radius: 10px;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .registration-input {
+      height: 55px;
+      border-radius: 12px;
+      border: 2px solid #dce2e8;
+      font-size: 17px;
+      padding-left: 18px;
+      text-transform: uppercase;
+    }
+
+    .registration-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 0.2rem rgba(0,152,121,0.15);
+    }
+
+    .check-btn {
+      width: 100%;
+      height: 55px;
+      border: none;
+      border-radius: 12px;
+      background: var(--green);
+      color: white;
+      font-size: 17px;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+
+    .check-btn:hover {
+      background: #007f66;
+      transform: translateY(-1px);
+    }
+
+    .check-btn:disabled {
+      opacity: 0.7;
+      transform: none;
+    }
+
+    #result {
+      display: none;
+      margin-top: 25px;
+    }
+
+    .participant-card {
+      background: #f8fafc;
+      border: 1px solid #e3e8ee;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .participant-name {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .registration-code {
+      color: #6c757d;
+      font-size: 14px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 9px 16px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 14px;
+      margin-top: 12px;
+    }
+
+    .status-allocated {
+      background: #d1fae5;
+      color: #047857;
+    }
+
+    .status-approved {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .status-paid {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .status-reserved {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-cancelled {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .status-not {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .room-card {
+      border-radius: 18px;
+      background: linear-gradient(
+        135deg,
+        var(--navy),
+        #123e68
+      );
+      color: white;
+      padding: 25px;
+      margin-top: 18px;
+    }
+
+    .room-card h4 {
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .room-item {
+      background: rgba(255,255,255,0.09);
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      height: 100%;
+    }
+
+    .room-item i {
+      color: var(--gold);
+      font-size: 23px;
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .room-label {
+      font-size: 12px;
+      opacity: 0.75;
+      text-transform: uppercase;
+    }
+
+    .room-value {
+      font-size: 19px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .progress-message {
+      background: #f8fafc;
+      border-left: 5px solid var(--gold);
+      padding: 17px;
+      border-radius: 10px;
+      margin-top: 18px;
+      color: #475569;
+    }
+
+    .error-box {
+      background: #fff1f2;
+      color: #be123c;
+      border: 1px solid #fecdd3;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 18px;
+      background: #f8fafc;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    .spinner-border {
+      width: 20px;
+      height: 20px;
+      border-width: 2px;
+    }
+
+    @media(max-width: 576px) {
+
+      .content {
+        padding: 22px;
+      }
+
+      .header {
+        padding: 28px 20px;
+      }
+
+      .header h1 {
+        font-size: 23px;
+      }
+
+      .room-value {
+        font-size: 17px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="page-wrapper">
+
+  <div class="status-card">
+
+    <!-- HEADER -->
+    <div class="header">
+
+      <div class="logo-circle">
+        SNMM
+      </div>
+
+      <h1>SNMM 2026</h1>
+
+      <p>Room Reservation Status Checker</p>
+
+      <div class="gold-line"></div>
+
+    </div>
+
+
+    <!-- CONTENT -->
+    <div class="content">
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Last 5 Digits of Registration Number
+                </label>
+
+                <input
+                    type="text"
+                    id="registrationCode"
+                    class="form-control registration-input"
+                    placeholder="e.g. 00125"
+                    maxlength="5"
+                    inputmode="numeric"
+                    autocomplete="off"
+                >
+
+                <div class="form-text">
+                    Enter only the last 5 digits of your registration number.
+                </div>
+
+             </div>
+
+
+      <!-- INPUT 
+      <div class="mb-3">
+
+        <label class="form-label">
+          Registration Number
+        </label>
+
+        <input
+          type="text"
+          id="registrationCode"
+          class="form-control registration-input"
+          placeholder="e.g. SNMM00125"
+          autocomplete="off"
+        >
+
+      </div-->
+
+
+      <!-- BUTTON -->
+      <button
+        id="checkBtn"
+        class="check-btn"
+        onclick="checkStatus()"
+      >
+
+        <i class="bi bi-search me-2"></i>
+
+        Check Room Status
+
+      </button>
+
+
+      <!-- ERROR -->
+      <div id="errorBox" class="error-box"></div>
+
+
+      <!-- RESULT -->
+      <div id="result">
+
+        <!-- Participant -->
+        <div class="participant-card">
+
+          <div class="participant-name" id="participantName">
+            -
+          </div>
+
+          <div class="registration-code">
+            Registration No:
+            <strong id="displayRegistration">
+              -
+            </strong>
+          </div>
+
+          <div id="statusBadge" class="status-badge status-not">
+            Status
+          </div>
+
+        </div>
+
+
+        <!-- Room Details -->
+        <div
+          id="roomCard"
+          class="room-card"
+          style="display:none;"
+        >
+
+          <h4>
+            <i class="bi bi-house-door-fill me-2"></i>
+            Your Room Allocation
+          </h4>
+
+          <div class="row g-3">
+
+            <div class="col-4">
+
+              <div class="room-item">
+
+                <i class="bi bi-building"></i>
+
+                <div class="room-label">
+                  Block
+                </div>
+
+                <div
+                  class="room-value"
+                  id="blockName"
+                >
+                  -
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="col-4">
+
+              <div class="room-item">
+
+                <i class="bi bi-door-open"></i>
+
+                <div class="room-label">
+                  Room
+                </div>
+
+                <div
+                  class="room-value"
+                  id="roomNumber"
+                >
+                  -
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="col-4">
+
+              <div class="room-item">
+
+                <i class="bi bi-person-workspace"></i>
+
+                <div class="room-label">
+                  Bed
+                </div>
+
+                <div
+                  class="room-value"
+                  id="bedNumber"
+                >
+                  -
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="text-center mt-4">
+
+            <small style="opacity:.75;">
+              Allocated on
+            </small>
+
+            <div
+              id="allocatedAt"
+              class="fw-bold mt-1"
+            >
+              -
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Progress Message -->
+        <div
+          id="progressMessage"
+          class="progress-message"
+        >
+
+          <i class="bi bi-info-circle me-2"></i>
+
+          <span id="progressText">
+            Your reservation is being processed.
+          </span>
+
+        </div>
+
+
+        <!-- Room Type -->
+        <div
+          id="roomTypeContainer"
+          class="text-center mt-3"
+          style="display:none;"
+        >
+
+          <small class="text-muted">
+            Room Type
+          </small>
+
+          <div
+            id="roomType"
+            class="fw-bold"
+            style="color:#0B1F3A;"
+          >
+            -
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+    <div class="footer">
+
+      SNMM 2026 • Room Reservation System
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbx7Z-L7l4hTPvZu3fHDbFT-v3lSc6p0VEQNamyGeicHVo-a4apXDt7EQtwqKzoHPX0ibw/exec";
+
+
+document
+  .getElementById("registrationCode")
+  .addEventListener("keypress", function(event) {
+
+    if (event.key === "Enter") {
+      checkStatus();
+    }
+
+  });
+
+
+async function checkStatus() {
+
+  const input =
+    document
+      .getElementById("registrationCode")
+      .value
+      .trim()
+      .toUpperCase();
+
+  const btn =
+    document.getElementById("checkBtn");
+
+  const result =
+    document.getElementById("result");
+
+  const errorBox =
+    document.getElementById("errorBox");
+
+
+  // Clear previous messages
+  errorBox.style.display = "none";
+  errorBox.innerHTML = "";
+
+  result.style.display = "none";
+
+
+  if (!input) {
+
+    showError(
+      "Please enter your registration number."
+    );
+
+    return;
+  }
+
+
+  // Loading state
+  btn.disabled = true;
+
+  btn.innerHTML = `
+    <span
+      class="spinner-border spinner-border-sm me-2"
+      role="status"
+    ></span>
+    Checking...
+  `;
+
+
+  try {
+
+    const url =
+      API_URL +
+      "?action=checkStatus&registrationCode=" +
+      encodeURIComponent(input);
+
+
+    const response =
+      await fetch(url, {
+        method: "GET",
+        cache: "no-store"
+      });
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Unable to connect to the reservation system."
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    console.log("Status response:", data);
+
+
+    if (!data.success) {
+
+      showError(
+        data.message ||
+        "Unable to retrieve your reservation status."
+      );
+
+      return;
+    }
+
+
+    displayResult(data);
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    showError(
+      "Unable to connect to the SNMM reservation system. Please try again."
+    );
+
+  } finally {
+
+    btn.disabled = false;
+
+    btn.innerHTML = `
+      <i class="bi bi-search me-2"></i>
+      Check Room Status
+    `;
+
+  }
+
+}
+
+
+function displayResult(data) {
+
+  const result =
+    document.getElementById("result");
+
+  const roomCard =
+    document.getElementById("roomCard");
+
+  const progressMessage =
+    document.getElementById("progressMessage");
+
+  const roomTypeContainer =
+    document.getElementById("roomTypeContainer");
+
+
+  result.style.display = "block";
+
+
+  document.getElementById("participantName")
+    .textContent =
+      data.participantName || "-";
+
+
+  document.getElementById("displayRegistration")
+    .textContent =
+      data.registrationCode || "-";
+
+
+  const status =
+    data.status || "Unknown";
+
+
+  setStatusBadge(status);
+
+
+  // Room type
+  if (data.roomType) {
+
+    document.getElementById("roomType")
+      .textContent =
+        data.roomType;
+
+    roomTypeContainer.style.display =
+      "block";
+
+  } else {
+
+    roomTypeContainer.style.display =
+      "none";
+
+  }
+
+
+  // ALLOCATED
+  if (
+    status.toLowerCase() === "allocated"
+  ) {
+
+    roomCard.style.display =
+      "block";
+
+    progressMessage.style.display =
+      "none";
+
+
+    document.getElementById("blockName")
+      .textContent =
+        data.blockName || "-";
+
+
+    document.getElementById("roomNumber")
+      .textContent =
+        data.roomNumber || "-";
+
+
+    document.getElementById("bedNumber")
+      .textContent =
+        data.bedNumber || "-";
+
+
+    document.getElementById("allocatedAt")
+      .textContent =
+        formatDate(data.allocatedAt);
+
+    return;
+  }
+
+
+  // NOT ALLOCATED
+  roomCard.style.display =
+    "none";
+
+  progressMessage.style.display =
+    "block";
+
+
+  document.getElementById("progressText")
+    .textContent =
+      getProgressMessage(status);
+
+}
+
+
+function setStatusBadge(status) {
+
+  const badge =
+    document.getElementById("statusBadge");
+
+  badge.textContent =
+    status;
+
+  badge.className =
+    "status-badge";
+
+
+  const normalized =
+    status.toLowerCase();
+
+
+  if (normalized === "allocated") {
+
+    badge.classList.add(
+      "status-allocated"
+    );
+
+  } else if (
+    normalized === "approved"
+  ) {
+
+    badge.classList.add(
+      "status-approved"
+    );
+
+  } else if (
+    normalized === "payment verified"
+  ) {
+
+    badge.classList.add(
+      "status-paid"
+    );
+
+  } else if (
+    normalized === "reserved"
+  ) {
+
+    badge.classList.add(
+      "status-reserved"
+    );
+
+  } else if (
+    normalized === "cancelled"
+  ) {
+
+    badge.classList.add(
+      "status-cancelled"
+    );
+
+  } else {
+
+    badge.classList.add(
+      "status-not"
+    );
+
+  }
+
+}
+
+
+function getProgressMessage(status) {
+
+  switch (status) {
+
+    case "Not Registered":
+
+      return "We could not find a participant with this registration number. Please check the number and try again.";
+
+    case "Not Reserved":
+
+      return "Your registration was found, but you have not made a room reservation yet.";
+
+    case "Reserved":
+
+      return "Your room reservation has been received and is currently awaiting payment verification.";
+
+    case "Payment Verified":
+
+      return "Your payment has been verified. Your reservation is awaiting final approval.";
+
+    case "Approved":
+
+      return "Your reservation has been approved. Room allocation is currently pending.";
+
+    case "Cancelled":
+
+      return "This room reservation has been cancelled. Please contact the SNMM administration team if you believe this is an error.";
+
+    default:
+
+      return "Your reservation is currently being processed. Please check again later.";
+
+  }
+
+}
+
+
+function formatDate(value) {
+
+  if (!value) {
+    return "-";
+  }
+
+
+  const date =
+    new Date(value);
+
+
+  if (isNaN(date.getTime())) {
+
+    return value;
+
+  }
+
+
+  return date.toLocaleString(
+    "en-GH",
+    {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }
+  );
+
+}
+
+
+function showError(message) {
+
+  const errorBox =
+    document.getElementById("errorBox");
+
+  errorBox.innerHTML = `
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    ${escapeHtml(message)}
+  `;
+
+  errorBox.style.display =
+    "block";
+
+}
+
+
+function escapeHtml(value) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    value;
+
+  return div.innerHTML;
+
+}
+
+</script>
+
+</body>
+</html>

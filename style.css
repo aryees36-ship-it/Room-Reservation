@@ -2143,7 +2143,63 @@ body.dark-mode .full-room .available-number {
 
 }
 
+/* =========================================================
+   CHECK RESERVATION STATUS BUTTON
+========================================================= */
 
+.btn-status {
+
+  width: 100%;
+
+  margin-top: 12px;
+
+  min-height: 52px;
+
+  padding: 0 20px;
+
+  border-radius: 12px;
+
+  border: 2px solid #D4AF37;
+
+  background: transparent;
+
+  color: #0B1F3A;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    all 0.25s ease;
+}
+
+
+.btn-status:hover {
+
+  background: #D4AF37;
+
+  color: #0B1F3A;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 8px 18px
+    rgba(212, 175, 55, 0.20);
+}
+
+
+.btn-status i {
+
+  font-size: 16px;
+}
 /* ==========================================================
    45. DARK MODE - INPUTS
    ========================================================== */
